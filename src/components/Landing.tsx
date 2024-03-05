@@ -50,22 +50,21 @@ console.log(binarySearch(arr, target));
 const Landing = ({
   activeUsers,
   socket,
+  userLists,
 }: {
   activeUsers: number;
   socket: Socket;
+  userLists: string[];
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const showModal = () => {
     // handleCompile();
     sendCodeToSocket();
     setIsModalOpen(true);
   };
-
   const handleOk = () => {
     setIsModalOpen(false);
   };
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -185,6 +184,7 @@ const Landing = ({
     socket.on("receive_message", (data: any) => {
       console.log(data + "bipin");
       if (data) {
+        console.log(data);
         debugger;
       }
     });
@@ -238,7 +238,7 @@ const Landing = ({
           >
             Run
           </Button>
-          <ActiveUser activeUsers={activeUsers} />
+          <ActiveUser userLists={userLists} activeUsers={activeUsers} />
         </div>
       </div>
       <div className="flex flex-row space-x-4 items-start px-4 py-4">
