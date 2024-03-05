@@ -4,7 +4,7 @@ import { Button, Form, Input, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
-const socket: Socket = io("http://localhost:8000");
+const socket: Socket = io("https://coderush-backend.onrender.com/");
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
