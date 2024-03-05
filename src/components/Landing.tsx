@@ -49,15 +49,19 @@ const Landing = ({
   activeUsers,
   socket,
   userLists,
+  currentUser,
+  roomId,
 }: {
   activeUsers: number;
   socket: Socket;
   userLists: string[];
+  currentUser: string;
+  roomId: string;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
-    handleCompile();
-    // sendCodeToSocket();
+    // handleCompile();
+    sendCodeToSocket();
     setIsModalOpen(true);
   };
   const handleOk = () => {
@@ -66,6 +70,7 @@ const Landing = ({
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const [output, setOutput] = useState<any>([]);
   const [code, setCode] = useState(javascriptDefault);
   const [customInput, setCustomInput] = useState("");
   const [outputDetails, setOutputDetails] = useState(null);
@@ -138,7 +143,11 @@ const Landing = ({
   };
 
   function sendCodeToSocket() {
-    socket.emit("send_message", JSON.stringify(code));
+    socket.emit("send_message", {
+      roomId: roomId,
+      username: currentUser,
+      message: JSON.stringify(code),
+    });
   }
   function handleThemeChange(th: any) {
     const theme = th;
@@ -182,13 +191,12 @@ const Landing = ({
     socket.on("receive_message", (data: any) => {
       console.log(data + "bipin");
       if (data) {
-        console.log(data);
-        debugger;
+        setOutput((prevOutput: any) => [...prevOutput, data]); // Updating state correctly using spread operator
       }
     });
-    return () => {
-      socket.off("receive_message");
-    };
+    // return () => {
+    //   socket.off("receive_message");
+    // };
   }, [socket]);
 
   return (
@@ -204,20 +212,6 @@ const Landing = ({
         draggable
         pauseOnHover
       />
-      <Modal
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        okButtonProps={{
-          className: "bg-red-800",
-        }}
-      >
-        <div className="flex flex-shrink-0 w-[100%] flex-col">
-          <OutputWindow outputDetails={outputDetails} />
-
-          {outputDetails && <OutputDetails outputDetails={outputDetails} />}
-        </div>
-      </Modal>
 
       <div className="flex flex-row items-center    justify-between w-[95%] mx-auto">
         {/* <div className="px-4 py-2">
@@ -236,17 +230,42 @@ const Landing = ({
           >
             Run
           </Button>
-          <ActiveUser userLists={userLists} activeUsers={activeUsers} />
+          <ActiveUser
+            currentUser={currentUser}
+            userLists={userLists}
+            activeUsers={activeUsers}
+          />
         </div>
       </div>
       <div className="flex flex-row space-x-4 items-start px-4 py-4">
-        <div className="flex flex-col w-full h-full justify-start items-end">
+        <div className="flex flex-col w-[70%] h-full justify-start items-end">
           <CodeEditorWindow
             code={code}
             onChange={onChange}
             language={language?.value}
             theme={theme.value}
           />
+        </div>
+        <div className="flex flex-col w-[30%] h-full ">
+          <div className="bg-[#1A2B34] text-[#CDD3DE] p-4 rounded-md mt-4 ">
+            <h1 className="text-lg font-semibold mb-2">Output</h1>
+            <div className="">
+              {output.map((item: any, index: any) => (
+                <div
+                  key={index}
+                  className="flex justify-between items-center mb-2"
+                >
+                  <span className="text-green-500">{item.username}</span>
+                  <span className="text-green-500">
+                    {item.message.output.trim()}
+                  </span>
+                  <span className="text-gray-500 text-sm">
+                    Execution Time: {item.message.executionTime} ms
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
