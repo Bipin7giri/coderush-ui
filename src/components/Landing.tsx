@@ -4,10 +4,8 @@ import CodeEditorWindow from "./CodeEditorWindow";
 import axios from "axios";
 import { classnames } from "../utils/general";
 import { languageOptions } from "../constants/languageOptions";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import { defineTheme } from "../lib/defineTheme";
 import useKeyPress from "../hooks/useKeyPress";
 import OutputWindow from "./OutputWindow";
@@ -15,6 +13,8 @@ import CustomInput from "./CustomInput";
 import OutputDetails from "./OutputDetails";
 import ThemeDropdown from "./ThemeDropdown";
 import { Button, Modal } from "antd";
+import ActiveUser from "./ActiveUser";
+import { Socket } from "socket.io-client";
 const javascriptDefault = `/**
 * Problem: Binary Search: Search a sorted array for a target value.
 */
@@ -45,18 +45,24 @@ const target = 5;
 console.log(binarySearch(arr, target));
 `;
 
-const Landing = () => {
+const Landing = ({
+  activeUsers,
+  socket,
+  userLists,
+}: {
+  activeUsers: number;
+  socket: Socket;
+  userLists: string[];
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const showModal = () => {
     handleCompile();
+    // sendCodeToSocket();
     setIsModalOpen(true);
   };
-
   const handleOk = () => {
     setIsModalOpen(false);
   };
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -100,7 +106,7 @@ const Landing = () => {
     };
     const options = {
       method: "POST",
-      url: "http://localhost:8000/api/v1/app",
+      url: "https://coderush-backend.vercel.app/api/v1/app",
       params: { base64_encoded: "true", fields: "*" },
       headers: {
         "content-type": "application/json",
@@ -131,6 +137,9 @@ const Landing = () => {
       });
   };
 
+  function sendCodeToSocket() {
+    socket.emit("send_message", JSON.stringify(code));
+  }
   function handleThemeChange(th: any) {
     const theme = th;
     console.log("theme...", theme);
@@ -169,6 +178,18 @@ const Landing = () => {
       progress: undefined,
     });
   };
+  useEffect(() => {
+    socket.on("receive_message", (data: any) => {
+      console.log(data + "bipin");
+      if (data) {
+        console.log(data);
+        debugger;
+      }
+    });
+    return () => {
+      socket.off("receive_message");
+    };
+  }, [socket]);
 
   return (
     <div className="bg-slate-300">
@@ -205,7 +226,7 @@ const Landing = () => {
         <div className="px-4 py-2">
           <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />
         </div>
-        <div>
+        <div className="flex items-center gap-8">
           <Button
             type="primary"
             className="bg-blue-600"
@@ -215,6 +236,7 @@ const Landing = () => {
           >
             Run
           </Button>
+          <ActiveUser userLists={userLists} activeUsers={activeUsers} />
         </div>
       </div>
       <div className="flex flex-row space-x-4 items-start px-4 py-4">
