@@ -4,7 +4,7 @@ import { Button, Form, Input, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
-const socket: Socket = io("https://coderush-backend.vercel.app/");
+const socket: Socket = io("http://localhost:8000");
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,6 +75,8 @@ export default function Home() {
       </Modal>
       {isRoomJoined ? (
         <Landing
+          currentUser={username}
+          roomId={roomId}
           userLists={userLists}
           activeUsers={activeUsersCount}
           socket={socket}
