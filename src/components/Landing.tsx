@@ -4,10 +4,8 @@ import CodeEditorWindow from "./CodeEditorWindow";
 import axios from "axios";
 import { classnames } from "../utils/general";
 import { languageOptions } from "../constants/languageOptions";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import { defineTheme } from "../lib/defineTheme";
 import useKeyPress from "../hooks/useKeyPress";
 import OutputWindow from "./OutputWindow";
@@ -58,8 +56,8 @@ const Landing = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
-    // handleCompile();
-    sendCodeToSocket();
+    handleCompile();
+    // sendCodeToSocket();
     setIsModalOpen(true);
   };
   const handleOk = () => {

@@ -10,10 +10,10 @@ const ActiveUser = ({
 }) => {
   return (
     <Card>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <div>
           <Statistic
-            title="Active Users"
+            title="Number Active Users"
             className="text-green-500"
             value={activeUsers}
             style={{
@@ -25,7 +25,7 @@ const ActiveUser = ({
         <div className="">
           <div className="flex items-center">
             <div className="mr-2">
-              <Statistic title="Top User" value="John Doe" />
+              <Statistic title="Lists Active Users" value="John Doe" />
             </div>
             <Avatar.Group maxCount={3}>
               {userLists.map((user) => {

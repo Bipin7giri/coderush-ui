@@ -4,7 +4,7 @@ import { Button, Form, Input, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
-const socket: Socket = io("http://localhost:8000");
+const socket: Socket = io("https://coderush-backend.vercel.app/");
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -85,17 +85,6 @@ export default function Home() {
             Start Now
           </Button>
         </div>
-        // <div className="App">
-        //   <input
-        //     placeholder="Room ID"
-        //     value={roomId}
-        //     onChange={(e) => {
-        //       setRoomId(e.target.value);
-        //     }}
-        //   />
-        //   <button onClick={joinRoom}>Join Room</button>
-        //   <h1>Active Users Count: {activeUsersCount}</h1>
-        // </div>
       )}
     </>
   );
