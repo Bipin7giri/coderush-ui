@@ -9,7 +9,6 @@ export const getMe = (token: string) => {
     },
   }).then(async (res) => {
     const data = await res.json();
-    console.log(data);
     return data;
   });
 };
