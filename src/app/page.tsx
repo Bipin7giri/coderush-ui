@@ -50,7 +50,7 @@ export default function Home() {
 
   return (
     <>
-      <Modal
+      {/* <Modal
         open={isModalOpen}
         footer={false}
         onOk={handleOk}
@@ -87,7 +87,7 @@ export default function Home() {
             Start Now
           </Button>
         </div>
-      )}
+      )} */}
     </>
   );
 }
