@@ -28,7 +28,6 @@ export default function Home() {
   useEffect(() => {
     socket.on("active_users_count", (data) => {
       if (data.roomId === roomId) {
-        console.log(data);
         setUserLists(data.usersLists);
         setActiveUsersCount(data.count);
       }
