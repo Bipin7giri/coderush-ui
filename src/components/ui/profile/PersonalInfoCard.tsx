@@ -13,7 +13,7 @@ const PersonalInfoCard = ({
   location,
 }: PersonalInfoCardIF) => {
   return (
-    <div className="p-4 mt-8 bg-background rounded-2xl border-primary border-2">
+    <div className="p-4 mt-8 bg-background rounded-2xl drop-shadow-sm ">
       <div className="flex justify-between gap-2 items-center">
         <h1 className="text-primary  text-2xl font-semibold">
           Personal Information

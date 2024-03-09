@@ -1,7 +1,10 @@
 import AvatarCard from "@/components/ui/profile/AvatarCard";
 import CompleteChallengesCard from "@/components/ui/profile/CompleteChallengesCard";
+import Education from "@/components/ui/profile/EducationCard";
 import PersonalInfoCard from "@/components/ui/profile/PersonalInfoCard";
+import ResumeCard from "@/components/ui/profile/ResumeCard";
 import SolvedChallenges from "@/components/ui/profile/SolvedChallenges";
+import WorkExperience from "@/components/ui/profile/WorkExperience";
 import { UserIF } from "@/interface/user.interface";
 import { getMe } from "@/services/users/user.service";
 import { cookies } from "next/headers";
@@ -23,18 +26,21 @@ export default async function page({ params }: any) {
               avatar={data.avatar as string}
               fullName={data.fullName}
             />
+            <SolvedChallenges />
+
             <PersonalInfoCard
               email={data.email}
               location={data?.location as string}
               phoneNumber={data?.phoneNumber as string}
             />
+            <ResumeCard />
           </div>
 
           <div className="w-[60%]">
             <div className="col-span-2">
-              <SolvedChallenges />
-
               <CompleteChallengesCard />
+              <WorkExperience />
+              <Education />
             </div>
           </div>
         </div>
