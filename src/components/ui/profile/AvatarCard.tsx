@@ -9,9 +9,9 @@ interface AvatarCardIF {
 }
 const AvatarCard = ({ avatar, fullName, username, position }: AvatarCardIF) => {
   return (
-    <div className="p-4 bg-background rounded-2xl border-primary border-2">
+    <div className="p-4 bg-background rounded-2xl drop-shadow-sm">
       <div className="flex justify-between gap-2 items-center">
-        <Avatar className="w-[100px] h-auto" src={avatar} />
+        <Avatar className="w-[80px] h-[80px]" src={avatar} />
         <div>
           <EditFilled />
         </div>
