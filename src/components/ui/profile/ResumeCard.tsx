@@ -33,13 +33,13 @@ const ResumeCard = ({ resume }: ResumeInterface) => {
 
   const handleDownload = async (fileId: string) => {
     const res = await fetch(
-      dev_base_url + "/upload/resume/download/" + fileId,
+      `${dev_base_url}/upload/resume/download/${fileId}`,
       {
         method: "GET",
         headers: {
           Authorization: token,
           "Content-Type": "application/json",
-        },
+        } as any,
       }
     );
 

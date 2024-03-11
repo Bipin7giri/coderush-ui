@@ -83,7 +83,7 @@ export const landingPageRoutes: RoutesIF[] = [
   },
   {
     name: "Coding Challenges",
-    href: "/coding-challenges",
+    href: "/app/challenges",
     // icons: <PiSuitcaseSimpleThin />,
     isClickAble: false,
   },

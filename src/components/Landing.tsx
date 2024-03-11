@@ -15,6 +15,7 @@ import ThemeDropdown from "./ThemeDropdown";
 import { Button, Modal } from "antd";
 import ActiveUser from "./ActiveUser";
 import { Socket } from "socket.io-client";
+import { QuestionIF } from "@/app/app/challenges/fastest-finger/page";
 const javascriptDefault = `/**
 * Problem: Binary Search: Search a sorted array for a target value.
 */
@@ -47,6 +48,7 @@ console.log(binarySearch(arr, target));
 
 const Landing = ({
   activeUsers,
+  question,
   socket,
   userLists,
   currentUser,
@@ -57,6 +59,7 @@ const Landing = ({
   userLists: string[];
   currentUser: string;
   roomId: string;
+  question: QuestionIF;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -135,7 +138,7 @@ const Landing = ({
 
         showErrorToast(
           `Quota of 100 requests exceeded for the Day! Please read the blog on freeCodeCamp to learn how to setup your own RAPID API Judge0!`,
-          10000
+          10000,
         );
         setProcessing(false);
         console.log("catch block...", error);
@@ -161,7 +164,7 @@ const Landing = ({
   }
   useEffect(() => {
     defineTheme("oceanic-next").then((_) =>
-      setTheme({ value: "oceanic-next", label: "Oceanic Next" })
+      setTheme({ value: "oceanic-next", label: "Oceanic Next" }),
     );
   }, []);
 
@@ -213,7 +216,7 @@ const Landing = ({
         pauseOnHover
       />
 
-      <div className="flex flex-row items-center    justify-between w-[95%] mx-auto">
+      <div className="mx-auto flex w-[95%]    flex-row items-center justify-between">
         {/* <div className="px-4 py-2">
           <LanguagesDropdown onSelectChange={onSelectChange} />
         </div> */}
@@ -237,8 +240,16 @@ const Landing = ({
           />
         </div>
       </div>
-      <div className="flex flex-row space-x-4 items-start px-4 py-4">
-        <div className="flex flex-col w-[70%] h-full justify-start items-end">
+      <div className="question-description rounded-lg bg-white p-6 shadow-md">
+        <h2 className="mb-2 text-xl font-bold">{question.title}</h2>
+        <p className="mb-2 text-sm">Difficulty: {question.difficulty}</p>
+        <div
+          dangerouslySetInnerHTML={{ __html: question.description }}
+          className="mb-4"
+        />
+      </div>
+      <div className="flex flex-row items-start space-x-4 px-4 py-4">
+        <div className="flex h-full w-[70%] flex-col items-end justify-start">
           <CodeEditorWindow
             code={code}
             onChange={onChange}
@@ -246,20 +257,20 @@ const Landing = ({
             theme={theme.value}
           />
         </div>
-        <div className="flex flex-col w-[30%] h-full ">
-          <div className="bg-[#1A2B34] text-[#CDD3DE] p-4 rounded-md mt-4 ">
-            <h1 className="text-lg font-semibold mb-2">Output</h1>
+        <div className="flex h-full w-[30%] flex-col ">
+          <div className="mt-4 rounded-md bg-[#1A2B34] p-4 text-[#CDD3DE] ">
+            <h1 className="mb-2 text-lg font-semibold">Output</h1>
             <div className="">
               {output.map((item: any, index: any) => (
                 <div
                   key={index}
-                  className="flex justify-between items-center mb-2"
+                  className="mb-2 flex items-center justify-between"
                 >
                   <span className="text-green-500">{item.username}</span>
                   <span className="text-green-500">
                     {item.message.output.trim()}
                   </span>
-                  <span className="text-gray-500 text-sm">
+                  <span className="text-sm text-gray-500">
                     Execution Time: {item.message.executionTime} ms
                   </span>
                 </div>
