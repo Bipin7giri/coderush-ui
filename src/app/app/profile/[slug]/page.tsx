@@ -20,40 +20,10 @@ export default async function page({ params }: any) {
   const res = await getMe(token?.value as unknown as string);
   const data: UserIF = res.data;
 
-  const handleWorkExperienceUpdate = () => {};
-  const handleAddWorkExperience = async (
-    workExperienceData: WorkExperienceIF
-  ) => {
-    "use server";
-    const cookieStore = cookies();
-    const token = cookieStore.get("access_token");
-
-    try {
-      const response = await fetch(prod_base_url + "/work-experience", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token?.value}`,
-        },
-        body: JSON.stringify(workExperienceData),
-      });
-      console.log(response);
-
-      if (!response.ok) {
-        console.log(response);
-      }
-
-      const responseData = await response.json();
-      // Handle the response data if needed
-      console.log(responseData);
-    } catch (error) {
-      console.error("Error adding work experience:", error);
-    }
-  };
   return (
     <>
-      <div className="max-w-[1280px] mt-8 mx-auto">
-        <div className="flex flex-wrap  justify-center gap-12 items-start">
+      <div className="mx-auto mt-8 max-w-[1280px]">
+        <div className="flex flex-wrap  items-start justify-center gap-12">
           <div className="w-[30%]">
             <AvatarCard
               username={data.username}
@@ -67,7 +37,7 @@ export default async function page({ params }: any) {
               location={data?.location as string}
               phoneNumber={data?.phoneNumber as string}
             />
-            <ResumeCard />
+            <ResumeCard resume={data?.resume} />
           </div>
 
           <div className="w-[60%]">

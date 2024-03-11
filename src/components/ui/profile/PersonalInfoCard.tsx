@@ -13,8 +13,8 @@ const PersonalInfoCard = ({
   location,
 }: PersonalInfoCardIF) => {
   return (
-    <div className="p-4 mt-8 bg-background rounded-2xl drop-shadow-sm ">
-      <div className="flex justify-between gap-2 items-center">
+    <div className="bg-background mt-8 rounded-2xl p-4 drop-shadow-sm ">
+      <div className="flex items-center justify-between gap-2">
         <h1 className="text-primary  text-2xl font-semibold">
           Personal Information
         </h1>
@@ -27,20 +27,20 @@ const PersonalInfoCard = ({
           <span>
             <MdEmail />
           </span>
-          <p className="text-gray-400 text-[14px]">{email}</p>
+          <p className="text-[14px] text-gray-400">{email}</p>
         </div>
         <div className="flex items-center gap-4 py-2">
           <span>
             <PhoneOutlined />
           </span>
-          <p className="text-gray-400 text-[14px]">{phoneNumber}</p>
+          <p className="text-[14px] text-gray-400">{phoneNumber}</p>
         </div>
 
         <div className="flex items-center gap-4 py-2">
           <span>
             <HiLocationMarker />
           </span>
-          <p className="text-gray-400 text-[14px]">{location}</p>
+          <p className="text-[14px] text-gray-400">{location}</p>
         </div>
       </div>
     </div>
