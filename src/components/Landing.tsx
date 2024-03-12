@@ -16,35 +16,7 @@ import { Button, Modal } from "antd";
 import ActiveUser from "./ActiveUser";
 import { Socket } from "socket.io-client";
 import { QuestionIF } from "@/app/app/challenges/fastest-finger/page";
-const javascriptDefault = `/**
-* Problem: Binary Search: Search a sorted array for a target value.
-*/
-
-// Time: O(log n)
-const binarySearch = (arr, target) => {
- return binarySearchHelper(arr, target, 0, arr.length - 1);
-};
-
-const binarySearchHelper = (arr, target, start, end) => {
- if (start > end) {
-   return false;
- }
- let mid = Math.floor((start + end) / 2);
- if (arr[mid] === target) {
-   return mid;
- }
- if (arr[mid] < target) {
-   return binarySearchHelper(arr, target, mid + 1, end);
- }
- if (arr[mid] > target) {
-   return binarySearchHelper(arr, target, start, mid - 1);
- }
-};
-
-const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const target = 5;
-console.log(binarySearch(arr, target));
-`;
+import { BsCheckLg } from "react-icons/bs";
 
 const Landing = ({
   activeUsers,
@@ -62,9 +34,9 @@ const Landing = ({
   question: QuestionIF;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
+  const showModal = (id: string, answer: string) => {
     // handleCompile();
-    sendCodeToSocket();
+    sendCodeToSocket(id, answer);
     setIsModalOpen(true);
   };
   const handleOk = () => {
@@ -74,8 +46,8 @@ const Landing = ({
     setIsModalOpen(false);
   };
   const [output, setOutput] = useState<any>([]);
-  const [code, setCode] = useState(javascriptDefault);
-  const [customInput, setCustomInput] = useState("");
+  const [code, setCode] = useState("");
+  const [customInput, setCustomInput] = useState("//" + question.description);
   const [outputDetails, setOutputDetails] = useState(null);
   const [processing, setProcessing] = useState<boolean | null>(null);
   const [theme, setTheme] = useState<any>("cobalt");
@@ -114,7 +86,7 @@ const Landing = ({
     };
     const options = {
       method: "POST",
-      url: "https://coderush-backend.vercel.app/api/v1/app",
+      url: "http://localhost:8000/api/v1/app",
       params: { base64_encoded: "true", fields: "*" },
       headers: {
         "content-type": "application/json",
@@ -145,11 +117,15 @@ const Landing = ({
       });
   };
 
-  function sendCodeToSocket() {
-    socket.emit("send_message", {
-      roomId: roomId,
+  function sendCodeToSocket(questionId: string, answer: any) {
+    const compoundRoomId = roomId + "-" + questionId;
+
+    socket.emit("send_fastest_finger_data", {
+      roomId: compoundRoomId,
       username: currentUser,
-      message: JSON.stringify(code),
+      code: JSON.stringify(code),
+      answer: answer,
+      timer: seconds,
     });
   }
   function handleThemeChange(th: any) {
@@ -167,7 +143,18 @@ const Landing = ({
       setTheme({ value: "oceanic-next", label: "Oceanic Next" }),
     );
   }, []);
+  const [seconds, setSeconds] = useState(0);
+  const [isActive, setIsActive] = useState(false);
 
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    interval = setInterval(() => {
+      setSeconds((prevSeconds) => prevSeconds + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
   const showSuccessToast = (msg: any) => {
     toast.success(msg || `Compiled Successfully!`, {
       position: "top-right",
@@ -191,8 +178,7 @@ const Landing = ({
     });
   };
   useEffect(() => {
-    socket.on("receive_message", (data: any) => {
-      console.log(data + "bipin");
+    socket.on("receive_fastest_finger_data", (data: any) => {
       if (data) {
         setOutput((prevOutput: any) => [...prevOutput, data]); // Updating state correctly using spread operator
       }
@@ -200,7 +186,7 @@ const Landing = ({
     // return () => {
     //   socket.off("receive_message");
     // };
-  }, [socket]);
+  }, [socket, roomId]);
 
   return (
     <div className="bg-slate-300">
@@ -229,7 +215,11 @@ const Landing = ({
             className="bg-blue-600"
             size="large"
             shape="default"
-            onClick={showModal}
+            onClick={() => {
+              console.log(question.answers[0]);
+              debugger;
+              showModal(question._id, question.answers[0].output);
+            }}
           >
             Run
           </Button>
@@ -240,14 +230,27 @@ const Landing = ({
           />
         </div>
       </div>
-      <div className="question-description rounded-lg bg-white p-6 shadow-md">
-        <h2 className="mb-2 text-xl font-bold">{question.title}</h2>
-        <p className="mb-2 text-sm">Difficulty: {question.difficulty}</p>
-        <div
-          dangerouslySetInnerHTML={{ __html: question.description }}
-          className="mb-4"
-        />
+      {JSON.stringify(question)}
+      <div className="mx-auto mt-8 flex w-[70%] items-center justify-between gap-4 rounded-lg bg-white p-6 shadow-md">
+        <div className="">
+          <h2 className="text-primary mb-2 text-xl font-bold">
+            {question.title}
+          </h2>
+          <p className="mb-2 text-sm ">Difficulty: {question.difficulty}</p>
+          <div
+            dangerouslySetInnerHTML={{ __html: question.description }}
+            className="mb-4"
+          />
+        </div>
+        <div className="">
+          <div className="mb-4 text-6xl font-bold">
+            {String(Math.floor(seconds / 3600)).padStart(2, "0")}:
+            {String(Math.floor((seconds % 3600) / 60)).padStart(2, "0")}:
+            {String(seconds % 60).padStart(2, "0")}
+          </div>
+        </div>
       </div>
+
       <div className="flex flex-row items-start space-x-4 px-4 py-4">
         <div className="flex h-full w-[70%] flex-col items-end justify-start">
           <CodeEditorWindow
@@ -257,7 +260,8 @@ const Landing = ({
             theme={theme.value}
           />
         </div>
-        <div className="flex h-full w-[30%] flex-col ">
+        {JSON.stringify(output)}
+        {/* <div className="flex h-full w-[30%] flex-col ">
           <div className="mt-4 rounded-md bg-[#1A2B34] p-4 text-[#CDD3DE] ">
             <h1 className="mb-2 text-lg font-semibold">Output</h1>
             <div className="">
@@ -277,7 +281,7 @@ const Landing = ({
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

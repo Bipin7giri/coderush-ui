@@ -18,7 +18,7 @@ export interface QuestionIF {
   tags: string[];
   created_at: Date;
   updated_at: Date;
-  answers: string[];
+  answers: any[];
 }
 const socket: Socket = io("https://coderush-backend.onrender.com");
 
@@ -39,7 +39,7 @@ const Page = () => {
   const showModal = (questionId: string) => {
     // handleCompile();
     const question: any = questions?.filter(
-      (item) => item._id === questionId
+      (item) => item._id === questionId,
     )[0];
     setSelectedQuestion(question);
     setIsModalOpen(true);
@@ -73,7 +73,7 @@ const Page = () => {
     setRoomJoined(true);
     setUsername(values.username);
     setRoomId(values.roomId);
-    socket.emit("join_fastet_finger_room", {
+    socket.emit("join_fastest_finger_room", {
       roomId: values.roomId,
       questionId: questionId,
       username: user?.username,
