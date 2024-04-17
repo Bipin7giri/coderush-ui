@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import { HotJar } from "@/hotjar/HotJar";
+import Header from "@/components/ui/global/Header/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +17,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <HotJar>{children}</HotJar>
+        <Header />
+        {children}
       </body>
     </html>
   );

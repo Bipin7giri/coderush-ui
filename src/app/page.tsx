@@ -28,7 +28,6 @@ export default function Home() {
   useEffect(() => {
     socket.on("active_users_count", (data) => {
       if (data.roomId === roomId) {
-        console.log(data);
         setUserLists(data.usersLists);
         setActiveUsersCount(data.count);
       }
@@ -50,7 +49,7 @@ export default function Home() {
 
   return (
     <>
-      <Modal
+      {/* <Modal
         open={isModalOpen}
         footer={false}
         onOk={handleOk}
@@ -87,7 +86,7 @@ export default function Home() {
             Start Now
           </Button>
         </div>
-      )}
+      )} */}
     </>
   );
 }
