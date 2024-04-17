@@ -5,7 +5,7 @@ import React from "react";
 
 const page = () => {
   return (
-    <div className="mx-auto mt-8 max-w-[1280px]">
+    <div className="mx-auto mt-8 max-w-[1920px]">
       <ChallengesTypesCard />
       <TrendingChallengesTypesCard />
     </div>

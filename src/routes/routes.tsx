@@ -76,6 +76,11 @@ export const landingPageRoutes: RoutesIF[] = [
     isClickAble: false,
   },
   {
+    name: "Learnings",
+    href: "/app/learnings",
+    isClickAble: false,
+  },
+  {
     name: "Prepare",
     href: "/app/prepare",
     // icons: <BiSolidDashboard />,

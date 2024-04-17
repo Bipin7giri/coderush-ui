@@ -39,7 +39,7 @@ const Page = () => {
   const showModal = (questionId: string) => {
     // handleCompile();
     const question: any = questions?.filter(
-      (item) => item._id === questionId,
+      (item) => item._id === questionId
     )[0];
     setSelectedQuestion(question);
     setIsModalOpen(true);

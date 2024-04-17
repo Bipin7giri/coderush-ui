@@ -110,7 +110,7 @@ const Landing = ({
 
         showErrorToast(
           `Quota of 100 requests exceeded for the Day! Please read the blog on freeCodeCamp to learn how to setup your own RAPID API Judge0!`,
-          10000,
+          10000
         );
         setProcessing(false);
         console.log("catch block...", error);
@@ -140,7 +140,7 @@ const Landing = ({
   }
   useEffect(() => {
     defineTheme("oceanic-next").then((_) =>
-      setTheme({ value: "oceanic-next", label: "Oceanic Next" }),
+      setTheme({ value: "oceanic-next", label: "Oceanic Next" })
     );
   }, []);
   const [seconds, setSeconds] = useState(0);
@@ -230,29 +230,28 @@ const Landing = ({
           />
         </div>
       </div>
-      {JSON.stringify(question)}
-      <div className="mx-auto mt-8 flex w-[70%] items-center justify-between gap-4 rounded-lg bg-white p-6 shadow-md">
-        <div className="">
-          <h2 className="text-primary mb-2 text-xl font-bold">
-            {question.title}
-          </h2>
-          <p className="mb-2 text-sm ">Difficulty: {question.difficulty}</p>
-          <div
-            dangerouslySetInnerHTML={{ __html: question.description }}
-            className="mb-4"
-          />
-        </div>
-        <div className="">
-          <div className="mb-4 text-6xl font-bold">
-            {String(Math.floor(seconds / 3600)).padStart(2, "0")}:
-            {String(Math.floor((seconds % 3600) / 60)).padStart(2, "0")}:
-            {String(seconds % 60).padStart(2, "0")}
-          </div>
-        </div>
-      </div>
 
       <div className="flex flex-row items-start space-x-4 px-4 py-4">
-        <div className="flex h-full w-[70%] flex-col items-end justify-start">
+        <div className="flex h-full w-[70%] flex-col items-end justify-start p-2">
+          <div className="mx-auto mt-8 flex  items-center justify-between gap-4 rounded-lg bg-white p-6 shadow-md">
+            <div className="">
+              <h2 className="text-primary mb-2 text-xl font-bold">
+                {question.title}
+              </h2>
+              <p className="mb-2 text-sm ">Difficulty: {question.difficulty}</p>
+              <div
+                dangerouslySetInnerHTML={{ __html: question.description }}
+                className="mb-4"
+              />
+            </div>
+            <div className="">
+              <div className="mb-4 text-6xl font-bold">
+                {String(Math.floor(seconds / 3600)).padStart(2, "0")}:
+                {String(Math.floor((seconds % 3600) / 60)).padStart(2, "0")}:
+                {String(seconds % 60).padStart(2, "0")}
+              </div>
+            </div>
+          </div>
           <CodeEditorWindow
             code={code}
             onChange={onChange}
@@ -260,7 +259,6 @@ const Landing = ({
             theme={theme.value}
           />
         </div>
-        {JSON.stringify(output)}
         {/* <div className="flex h-full w-[30%] flex-col ">
           <div className="mt-4 rounded-md bg-[#1A2B34] p-4 text-[#CDD3DE] ">
             <h1 className="mb-2 text-lg font-semibold">Output</h1>
